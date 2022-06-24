@@ -23,8 +23,8 @@ class Items(models.Model):
 
 
 class Modifiers(models.Model):
-    Modifiers_description = models.CharField(max_length=200)
-    items = models.ManyToManyField(Items)
+    modifiers_description = models.CharField(max_length=200)
+    items = models.ManyToManyField(Items, related_name='modifiers')
 
     class Meta:
         verbose_name = 'Modifiers'

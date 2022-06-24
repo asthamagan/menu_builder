@@ -6,7 +6,8 @@ from .serializers import (
     SectionSerializer,
     ItemsSerializer,
     ModifiersSerializer,
-    SectionItemsSerializer
+    SectionItemsSerializer,
+    ModifierItemsMapSerializer
 )
 from .models import Section, Items, Modifiers
 from django.shortcuts import get_object_or_404
@@ -119,5 +120,11 @@ class ModifierItemsMenuViewSet(APIView):
 
     def get(self, request, **kwargs):
         queryset = Section.objects.all()
-        serializer_class = SectionItemsSerializer(queryset, many=True, context={"request": request})
+        serializer_class = SectionItemsSerializer(queryset, many=True)
         return JsonResponse(serializer_class.data, safe=False)
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    print('called')
+    serializer_class = ModifierItemsMapSerializer
+    queryset = Modifiers.objects.all()
