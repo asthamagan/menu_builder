@@ -1,17 +1,20 @@
 from rest_framework import serializers
-from .models import Menu, Items, Modifiers
+from .models import Section, Items, Modifiers
 
 
-class MenuSerializer(serializers.ModelSerializer):
-    title = serializers.CharField(max_length=200)
+class SectionSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=200)
+    description = serializers.CharField(max_length=200)
 
     class Meta:
-        model = Menu
+        model = Section
         fields = ('__all__')
 
 
 class ItemsSerializer(serializers.ModelSerializer):
-    title = serializers.CharField(max_length=200)
+    name = serializers.CharField(max_length=200)
+    description = serializers.CharField(max_length=200)
+    price = serializers.FloatField()
 
     class Meta:
         model = Items
@@ -19,39 +22,23 @@ class ItemsSerializer(serializers.ModelSerializer):
 
 
 class ModifiersSerializer(serializers.ModelSerializer):
-    title = serializers.CharField(max_length=200)
+    description = serializers.CharField(max_length=200)
+    items = ItemsSerializer(read_only=True, many=True)
 
     class Meta:
         model = Modifiers
-        fields = ('__all__')
+        fields = ('items', 'description',)
 
 
-class MenuItemSerializer(serializers.ModelSerializer):
-    title = serializers.CharField(max_length=200)
-    menu = MenuSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Items
-        fields = ['title', 'menu']
-
-
-class ModifiersItemsSerializer(serializers.ModelSerializer):
-    title = serializers.CharField(max_length=200)
+class SectionItemsSerializer(serializers.ModelSerializer):
+    section = SectionSerializer(many=True, read_only=True)
     items = ItemsSerializer(many=True, read_only=True)
+    modifiers = ModifiersSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Modifiers
-        fields = ['title', 'items']
+        model = Section
+        fields = ['section', 'items', 'modifiers']
 
-
-class MenuItemsSerializer(serializers.ModelSerializer):
-    menu = MenuSerializer(many=True, read_only=True)
-    items = MenuItemSerializer(many=True, read_only=True)
-    modifiers = ModifiersItemsSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Menu
-        fields = ['menu', 'items', 'modifiers']
 
 
 

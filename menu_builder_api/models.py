@@ -2,8 +2,9 @@ from django.db import models
 
 
 # Create your models here.
-class Menu(models.Model):
-    title = models.CharField(max_length=200)
+class Section(models.Model):
+    name = models.CharField(max_length=200, default='')
+    description = models.CharField(max_length=200)
 
     class Meta:
         verbose_name = 'Menu'
@@ -11,8 +12,10 @@ class Menu(models.Model):
 
 
 class Items(models.Model):
-    title = models.CharField(max_length=200)
-    menu = models.ForeignKey(Menu, related_name='menu', on_delete=models.CASCADE)
+    name = models.CharField(max_length=200, default='')
+    description = models.CharField(max_length=200)
+    price = models.FloatField(default=0.0)
+    section = models.ForeignKey(Section, related_name='items', on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Items'
@@ -20,8 +23,8 @@ class Items(models.Model):
 
 
 class Modifiers(models.Model):
-    title = models.CharField(max_length=200)
-    items = models.ForeignKey(Items, related_name='items', on_delete=models.CASCADE)
+    Modifiers_description = models.CharField(max_length=200)
+    items = models.ManyToManyField(Items)
 
     class Meta:
         verbose_name = 'Modifiers'
