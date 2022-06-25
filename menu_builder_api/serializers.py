@@ -1,3 +1,4 @@
+from django.db.models import F
 from rest_framework import serializers
 from .models import Section, Items, Modifiers
 
@@ -94,5 +95,39 @@ class ModifierItemsMapSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class MenulistSerializer(serializers.ModelSerializer):
+    """
+    created by:
+    """
+    items = serializers.SerializerMethodField(read_only=True)
+    name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Section
+        fields = ["id", "name", "items"]
+
+    def get_items(self, obj):
+        final_list = []
+        try:
+            # print(obj.__dict__)
+            item_instances = Items.objects.filter(section=obj.id)
+            # print(item_instances.__dict__)
+            for i in item_instances:
+                print(i.modifiers)
+                sub_dict = dict()
+                modifier_instances = i.modifiers.all().annotate(name=F('modifiers_description')).values("id", 'name')
+                sub_dict['id'] = i.id
+                sub_dict['title'] = i.name
+                sub_dict['modifiers'] = modifier_instances
+                final_list.append(sub_dict)
+            print(final_list)
+            return final_list
+
+        except Exception as e:
+            print(e)
+            return None
+
+    def get_name(self, obj):
+        return obj.name
 
 

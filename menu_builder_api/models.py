@@ -7,8 +7,8 @@ class Section(models.Model):
     description = models.CharField(max_length=200)
 
     class Meta:
-        verbose_name = 'Menu'
-        verbose_name_plural = 'Menu'
+        verbose_name = 'Section'
+        verbose_name_plural = 'Section'
 
 
 class Items(models.Model):
