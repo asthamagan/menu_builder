@@ -12,7 +12,7 @@ router = DefaultRouter()
 router.register(r'items-modifiers', OrderViewSet, basename='items-modifiers')
 
 urlpatterns = [
-    path('section/', MenuViews.as_view()),
+    path('section/', MenuViews.as_view(), name='section'),
     path('section/<int:id>', MenuViews.as_view()),
     path('items/', ItemsViews.as_view()),
     path('items/<int:id>', ItemsViews.as_view()),

@@ -16,6 +16,9 @@ from django.shortcuts import get_object_or_404
 
 # Create your views here.
 class MenuViews(APIView):
+    '''
+        CRUD operation for the section model
+    '''
     def post(self, request):
         serializer = SectionSerializer(data=request.data)
         if serializer.is_valid():
@@ -39,17 +42,20 @@ class MenuViews(APIView):
         serializer = SectionSerializer(item, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response({"status": "success", "data": serializer.data})
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
         else:
-            return Response({"status": "error", "data": serializer.errors})
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, id=None):
         item = get_object_or_404(Section, id=id)
         item.delete()
-        return Response({"status": "success", "data": "Section Deleted"})
+        return Response({"status": "success", "data": "Section Deleted"}, status=status.HTTP_200_OK)
 
 
 class ItemsViews(APIView):
+    '''
+        CRUD operation for the items model
+    '''
     def post(self, request):
         serializer = ItemsSerializer(data=request.data)
         if serializer.is_valid():
@@ -73,17 +79,20 @@ class ItemsViews(APIView):
         serializer = ItemsSerializer(item, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response({"status": "success", "data": serializer.data})
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
         else:
-            return Response({"status": "error", "data": serializer.errors})
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, id=None):
         item = get_object_or_404(Section, id=id)
         item.delete()
-        return Response({"status": "success", "data": "Item Deleted"})
+        return Response({"status": "success", "data": "Item Deleted"}, status=status.HTTP_200_OK)
 
 
 class ModifiersViews(APIView):
+    '''
+        CRUD operation for the Modifiers model
+    '''
     def post(self, request):
         serializer = ModifiersSerializer(data=request.data)
         if serializer.is_valid():
@@ -107,18 +116,20 @@ class ModifiersViews(APIView):
         serializer = ModifiersSerializer(item, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response({"status": "success", "data": serializer.data})
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
         else:
-            return Response({"status": "error", "data": serializer.errors})
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, id=None):
         item = get_object_or_404(Modifiers, id=id)
         item.delete()
-        return Response({"status": "success", "data": "Modifier Deleted"})
+        return Response({"status": "success", "data": "Modifier Deleted"}, status=status.HTTP_200_OK)
 
 
 class ModifierItemsMenuViewSet(APIView):
-
+    '''
+        liting of data with all mapping of Sections, Items, Modifier
+    '''
     def get(self, request, **kwargs):
         queryset = Section.objects.all()
         serializer_class = MenulistSerializer(queryset, many=True)
@@ -126,5 +137,9 @@ class ModifierItemsMenuViewSet(APIView):
 
 
 class OrderViewSet(viewsets.ModelViewSet):
+    '''
+        Mappting data of Items and modifiers and
+        GET, Create, PUT, PATCH method
+    '''
     serializer_class = ModifierItemsMapSerializer
     queryset = Modifiers.objects.all()

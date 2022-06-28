@@ -123,9 +123,8 @@ class MenulistSerializer(serializers.ModelSerializer):
             print(final_list)
             return final_list
 
-        except Exception as e:
-            print(e)
-            return None
+        except:
+            return []
 
     def get_name(self, obj):
         return obj.name
